@@ -45,6 +45,9 @@
   --border-color: #3a3545;
   --muted: #444654;
   --scrollbar: #565869;
+  --violet-500-20: rgba(139, 92, 246, 0.2);
+  --violet-600: #7c3aed;
+
 }
 
 /* Dark mode (optional; can be used with next-themes later) */
@@ -160,6 +163,30 @@ body {
    background-color: var(--muted);
   transition: background-color 0.2s ease;
 }
+
+.quote {
+  @apply text-xs sm:text-sm italic font-light text-gray-300;
+}
+
+.quote-sm {
+  @apply text-sm sm:text-base italic font-medium text-gray-200;
+}
+
+.quote-button{
+  @apply text-xs sm:text-sm italic font-light text-gray-300 hover:text-violet-400  transition-all duration-200 hover:scale-105;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.animate-pulse {
+  animation: blink 1s step-end infinite;
+}
+
+
 
 /* p {
   font-size: 14px;

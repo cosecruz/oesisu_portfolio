@@ -17,7 +17,7 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
 
 
   return (
-    <div className="flex min-h-screen w-full bg-theme-main text-theme-primary">
+    <div className="flex h-full w-full bg-theme-main text-theme-primary">
       {/* Sidebar: conditionally render admin or normal */}
       <Sidebar navs={navs} />
 
