@@ -2,14 +2,9 @@
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence, Variants, Transition } from 'framer-motion';
+import { CarouselType } from '../lib/definitions';
 
-export interface SmallCarrouselType {
-  tag: string;
-  title: string;
-  label?: string;
-  from?: string;
-  to?: string;
-}
+
 
 const carouselItemVariants: Variants = {
   hidden: { opacity: 0, x: 50 },
@@ -17,7 +12,7 @@ const carouselItemVariants: Variants = {
   exit: { opacity: 0, x: -50, transition: { duration: 0.5, ease: 'easeInOut' } as Transition },
 };
 
-const SmallCarrousel: React.FC<{ items: SmallCarrouselType[] }> = ({ items }) => {
+const SmallCarrousel: React.FC<{ items: CarouselType[] }> = ({ items }) => {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);

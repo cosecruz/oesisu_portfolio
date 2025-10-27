@@ -11,3 +11,11 @@ export interface Role {
   role: string;
   comment: string;
 }
+
+export interface CarouselType {
+  tag: string;
+  title: string;
+  label?: string;
+  from?: string;
+  to?: string;
+}

@@ -59,7 +59,7 @@ export default function Sidebar({ navs }: SidebarProps) {
     <>
       {!isOpen && (
         <button
-          className="fixed top-4 left-4 z-50 text-theme-primary hover:text-(--accent) focus:outline-none focus:ring-2 focus:ring-(--accent) p-2 rounded"
+          className="fixed top-4 left-4 z-50 text-theme-primary hover:text-accent focus:outline-none focus:ring-2 focus:ring-(--accent) p-2 rounded"
           onClick={toggleSidebar}
           title="Toggle sidebar"
           aria-label="Toggle sidebar"

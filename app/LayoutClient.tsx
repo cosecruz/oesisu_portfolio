@@ -17,17 +17,13 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
 
 
   return (
-    <div className="flex h-full w-full bg-theme-main text-theme-primary">
-      {/* Sidebar: conditionally render admin or normal */}
-      <Sidebar navs={navs} />
+  <div className="flex min-h-screen w-full bg-theme-main text-theme-primary overflow-hidden">
+  <Sidebar navs={navs} />
 
-      <div className="flex flex-col flex-1 bg-main">
-        {/* Topbar shared across all routes */}
-        <Topbar admin={isAdmin} />
-
-        {/* Main content */}
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
-      </div>
-    </div>
+  <div className="flex flex-col flex-1 bg-main transition-all duration-300">
+    <Topbar admin={isAdmin} />
+    <main className="flex-1 overflow-y-auto p-4 sm:p-6">{children}</main>
+  </div>
+</div>
   );
 }
