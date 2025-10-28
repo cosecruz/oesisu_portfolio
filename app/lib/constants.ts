@@ -1,17 +1,33 @@
-import { NavListInfo } from "./definitions";
+import type { NavListInfo } from "./definitions";
+import {
+  User,
+  FileText,
+  Target,
+  Users,
+  FolderGit2,
+  BookOpenText,
+  AppWindow,
+  MessageSquare,
+  LayoutDashboard,
+  FilePlus,
+  Database,
+  ClipboardList,
+  Settings,
+} from "lucide-react";
 
+/* ──────────────── GENERAL NAVIGATION ──────────────── */
 export const GENERAL_PAGE_LISTS: NavListInfo[] = [
-  { id: "me", label: "Me", href: "/me", iconUrl: "/account.svg" },
-  { id: "resume", label: "Resume", href: "/resume", iconUrl: "/docs.svg" },
-  { id: "goals", label: "Goals", href: "/goals", iconUrl: "/goal.svg" },
-  { id: "contacts", label: "Contacts", href: "/contacts", iconUrl: "/socials.svg" },
-  { id: "projects", label: "Projects", href: "/projects", iconUrl: "/project.svg" },
-  { id: "knowledge_base", label: "Knowledge Base", href: "/knowledge_base", iconUrl: "/librarybook.svg" },
+  { id: "me", label: "Me", href: "/me", icon: User },
+  { id: "resume", label: "Resume", href: "/resume", icon: FileText },
+  { id: "goals", label: "Goals", href: "/goals", icon: Target },
+  { id: "contacts", label: "Contacts", href: "/contacts", icon: Users },
+  { id: "projects", label: "Projects", href: "/projects", icon: FolderGit2 },
+  { id: "knowledge_base", label: "Knowledge Base", href: "/knowledge_base", icon: BookOpenText },
   {
     id: "apps",
     label: "Apps",
     href: "/app",
-    iconUrl: "/apps.svg",
+    icon: AppWindow,
     hasDropdown: true,
     dropdownItems: [
       { label: "App 1", href: "/apps/app1" },
@@ -22,7 +38,7 @@ export const GENERAL_PAGE_LISTS: NavListInfo[] = [
     id: "chat",
     label: "Chat",
     href: "/chat",
-    iconUrl: "/chats.svg",
+    icon: MessageSquare,
     hasDropdown: true,
     dropdownItems: [
       { label: "Direct Messages", href: "/chat/dm" },
@@ -31,26 +47,27 @@ export const GENERAL_PAGE_LISTS: NavListInfo[] = [
   },
 ];
 
+/* ──────────────── ADMIN NAVIGATION ──────────────── */
 export const ADMIN_PAGE_LISTS: NavListInfo[] = [
-  { id: "new", label: "New", iconUrl: "/new.svg" }, // No href, as in original
-  { id: "dashboard", label: "DashBoard", href: "/dashboard", iconUrl: "/admin/dashboard.svg" },
-  { id: "entries", label: "Entries", href: "/admin/entry", iconUrl: "/entry.svg" },
-  { id: "admin_me", label: "Me", href: "/admin/me", iconUrl: "/account.svg" },
-  { id: "admin_resume", label: "CV (Curriculum Vitae)", href: "/admin/resume", iconUrl: "/docs.svg" },
-  { id: "admin_goals", label: "Goals", href: "/admin/goals", iconUrl: "/goal.svg" },
-  { id: "admin_contacts", label: "Contacts", href: "/admin/contacts", iconUrl: "/socials.svg" },
-  { id: "admin_projects", label: "Projects", href: "/admin/projects", iconUrl: "/project.svg" },
+  { id: "new", label: "New", icon: FilePlus },
+  { id: "dashboard", label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+  { id: "entries", label: "Entries", href: "/admin/entry", icon: ClipboardList },
+  { id: "admin_me", label: "Me", href: "/admin/me", icon: User },
+  { id: "admin_resume", label: "CV (Curriculum Vitae)", href: "/admin/resume", icon: FileText },
+  { id: "admin_goals", label: "Goals", href: "/admin/goals", icon: Target },
+  { id: "admin_contacts", label: "Contacts", href: "/admin/contacts", icon: Users },
+  { id: "admin_projects", label: "Projects", href: "/admin/projects", icon: FolderGit2 },
   {
     id: "admin_knowledge_base",
     label: "Knowledge Base",
     href: "/admin/knowledge_base",
-    iconUrl: "/librarybook.svg",
+    icon: BookOpenText,
   },
   {
     id: "admin_apps",
     label: "Apps",
     href: "/admin/apps",
-    iconUrl: "/apps.svg",
+    icon: AppWindow,
     hasDropdown: true,
     dropdownItems: [
       { label: "Admin App 1", href: "/admin/apps/app1" },
@@ -61,12 +78,13 @@ export const ADMIN_PAGE_LISTS: NavListInfo[] = [
     id: "admin_chat",
     label: "Chat",
     href: "/admin/chat",
-    iconUrl: "/chats.svg",
+    icon: MessageSquare,
     hasDropdown: true,
     dropdownItems: [
       { label: "Admin DMs", href: "/admin/chat/dm" },
       { label: "Admin Group Chat", href: "/admin/chat/group" },
     ],
   },
+  { id: "admin_settings", label: "Settings", href: "/admin/settings", icon: Settings },
+  { id: "admin_db", label: "Database", href: "/admin/db", icon: Database },
 ];
-

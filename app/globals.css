@@ -1,381 +1,108 @@
+/* app/globals.css */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
-@import "tw-animate-css";
 @import "tailwindcss";
-@tailwind utilities;
 
-@custom-variant dark (&:is(.dark *));
+/* ────── CUSTOM THEME (v4 CSS-First Config) ────── */
+@theme {
+  --font-sans: 'Noto Sans', ui-sans-serif, system-ui;
+  --radius-lg: 1rem;
+  --shadow-card: 0 8px 32px 0 rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 18px 50px 0 rgb(10 11 12 / 0.2);
 
-/* @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Colors as CSS Vars */
+  --color-bg-primary: #0f0f10;
+  --color-bg-secondary: #1a1a1b;
+  --color-bg-card: #1e1e1f;
+  --color-text-primary: #f5f5f7;
+  --color-text-secondary: #a1a1aa;
+  --color-accent: #8b5cf6;
+  --color-accent-hover: #a78bfa;
+  --color-border: #333337;
+  --color-muted: #2c2c2e;
+
+  /* Extend Defaults */
+  --color-background: var(--color-bg-primary);
+  --color-foreground: var(--color-text-primary);
+  --color-card: var(--color-bg-card);
+  --color-border: var(--color-border);
+  --color-accent: var(--color-accent);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --gradient-color: linear-gradient(
-    to right,
-    #10a37f 0%,
-    #0071e3 100%
-  );
-  }
-} */
-
-/* === GLOBAL THEME VARIABLES === */
-:root {
-  /* Backgrounds */
-  --bg-primary: #242222; /* main background (chat area) */
-  --bg-secondary: #181818; /* sidebar background */
-
-  /* Text */
-  --text-primary: #ECECF1;
-  --text-secondary: #9CA3AF;
-
-  /* Accent / brand color (ChatGPT green-ish) */
-  --accent: oklch(62.733% 0.30691 316.377);
-  --accent-hover: #4f18e6;
-
-  --border-color: #3a3545;
-  --muted: oklch(65.432% .00688 16.641);
-  --scrollbar: #565869;
-  --violet-500-20: rgba(139, 92, 246, 0.2);
-  --violet-600: #7c3aed;
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-
+/* Dark Mode (toggle with `class="dark"` on <html>) */
+.dark {
+  --color-bg-primary: #0f0f10;
+  --color-bg-secondary: #1a1a1b;
+  --color-bg-card: #1e1e1f;
+  --color-text-primary: #f5f5f7;
+  --color-text-secondary: #a1a1aa;
+  --color-accent: #8b5cf6;
+  --color-accent-hover: #a78bfa;
+  --color-border: #333337;
+  --color-muted: #2c2c2e;
 }
 
-/* Dark mode (optional; can be used with next-themes later) */
-/* [data-theme='light'] {
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #F3F4F6;
-  --text-primary: #111827;
-  --text-secondary: #6B7280;
-  --accent: #0071E3;
-  --accent-hover: #005BB5;
-} */
-
-/* === GLOBAL ELEMENT STYLES === */
-html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: 'Noto Sans', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+/* ────── BASE STYLES (v4 Layer) ────── */
+@layer base {
+  html, body, #__next {
+    @apply h-full w-full m-0 p-0 bg-background text-foreground font-sans;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
     overflow-x: hidden;
+    overscroll-behavior: smooth;
+    /* scroll-behavior: smooth; */
+  }
+
+  * {
+    @apply border-border outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-transparent;
+  }
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
+/* ────── CUSTOM UTILITIES (v4 Layer) ────── */
+@layer utilities {
+  .bg-main { @apply bg-[var(--color-bg-primary)]; }
+  .bg-sidebar { @apply bg-[var(--color-bg-secondary)]; }
+  .bg-card { @apply bg-[var(--color-bg-card)]; }
+  .text-main { @apply text-[var(--color-text-primary)]; }
+  .text-muted { @apply text-[var(--color-text-secondary)]; }
+  .border-main { @apply border-[var(--color-border)]; }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+
+  /* Custom Shadows */
+  .shadow-card { box-shadow: var(--shadow-card); }
+  .shadow-lg { box-shadow: var(--shadow-lg); }
+
+   /* --- Custom scrollbar (modern, subtle, professional) --- */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(93, 93, 129, 0.4) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  height: 8px;
   width: 8px;
 }
-::-webkit-scrollbar-thumb {
-  background: var(--scrollbar);
-  border-radius: 8px;
-}
 
-/* === UTILITIES === */
-@layer utilities {
-  .bg-theme-main {
-    background-color: var(--bg-primary);
-  }
-  .bg-theme-secondary {
-    background-color: var(--bg-secondary);
-  }
-  .text-theme-primary {
-    color: var(--text-primary);
-  }
-  .text-theme-secondary {
-    color: var(--text-secondary);
-  }
-  .border-theme {
-    border-color: var(--border-color);
-  }
-}
-
-/* === SIDEBAR STYLING === */
-.sidebar {
-  transition: width 0.3s ease, transform 0.3s ease;
-  /* overflow: hidden; */
-}
-
-.sidebar.collapsed {
-  width: 4rem; /* collapsed state */
-}
-
-.sidebar.expanded {
-  width: 12rem; /* normal state */
-}
-
-/* Sidebar scrollbar hidden */
-.sidebar::-webkit-scrollbar {
-  width: 0;
+.custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
 
-/* Sidebar link hover */
-.sidebar-item:hover {
-  background-color: var(--muted);
-  transition: background-color 0.2s ease;
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(150, 150, 180, 0.35);
+  border-radius: 9999px;
+  transition: background 0.3s ease;
 }
 
-/* Active chat item */
-.sidebar-item.active {
-  background-color: var(--accent);
-  color: white;
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(180, 180, 200, 0.6);
 }
-
-/* Collapsed tooltip (for icons only) */
-.sidebar-tooltip {
-  position: absolute;
-  left: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-  margin-left: 8px;
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s;
-}
-.sidebar-item:hover .sidebar-tooltip {
-  opacity: 1;
-}
-
-.icon_container {
-  width: 30px;
-  height: 30px;
-  border-radius: 100%;
-}
-
-.icon_container:hover{
-   background-color: var(--muted);
-  transition: background-color 0.2s ease;
-}
-
-.quote {
-  @apply text-xs sm:text-sm italic font-light text-gray-300;
-}
-
-.quote-sm {
-  @apply text-sm sm:text-base italic font-medium text-gray-200;
-}
-
-.quote-button{
-  @apply text-xs sm:text-sm italic font-light text-gray-300 hover:text-violet-400  transition-all duration-200 hover:scale-105;
-}
-
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
-}
-
-.animate-pulse {
-  animation: blink 1s step-end infinite;
-}
-
-/* p {
-  font-size: 14px;
-} */
-
-/* a {
-  color: var(--accent);
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-}
-
-button {
-  font-family: inherit;
-  background: var(--accent);
-  color: white;
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-button:hover {
-  background: #0e8d6e;
-} */
-
-/* === LAYOUT LIKE CHATGPT === */
-.main {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-/* .chat-container {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1rem 0;
-}
-
-.chat-bubble {
-  padding: 0.75rem 1rem;
-  border-radius: 1rem;
-  margin-bottom: 0.75rem;
-  max-width: 80%;
-}
-
-.chat-bubble.user {
-  background: var(--accent);
-  color: white;
-  align-self: flex-end;
-}
-
-.chat-bubble.ai {
-  background: var(--muted);
-  border: 1px solid var(--border);
-  color: var(--foreground);
-  align-self: flex-start;
-}
-
-.chat-input {
-  display: flex;
-  align-items: center;
-  border: 1px solid var(--border);
-  background: var(--muted);
-  border-radius: 12px;
-  padding: 0.75rem;
-  gap: 0.5rem;
-}
-
-.chat-input input {
-  flex: 1;
-  border: none;
-  background: transparent;
-  color: var(--foreground);
-  font-size: 1rem;
-  outline: none;
-} */
-
-@theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
 
 }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-
-  }
-  body {
-    @apply bg-background text-foreground;
-
-  }
-
-}
+/* ────── SCROLLBAR ────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { @apply bg-accent rounded-full; }

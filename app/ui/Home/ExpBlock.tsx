@@ -1,12 +1,13 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 
-const EXP_COLOR_CYCLE = ["#f3a20c", "#9af30c", "#0cf3aa", "#2e0cf3", "#f30c9e"];
-
-type ExpDataType = {
+interface ExpDataType {
   label: string;
   amount: number;
-};
+}
+
+const EXP_COLOR_CYCLE = ["#f3a20c", "#9af30c", "#0cf3aa", "#2e0cf3", "#f30c9e"];
 
 const expData: ExpDataType[] = [
   { label: "Years of Experience", amount: 4 },
@@ -21,26 +22,25 @@ export default function ExpBlock() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // ✅ Defer setMounted to the next tick to avoid "cascading renders"
-    const mountTimer = setTimeout(() => setMounted(true), 0);
+    // Smooth delayed mount
+    const mountTimer = setTimeout(() => setMounted(true), 150);
 
-    const duration = 5000; // total animation time (ms)
-    const steps = 70;
+    const duration = 4000; // total animation duration
+    const steps = 80; // number of frames
     const interval = duration / steps;
 
     const counterTimer = setInterval(() => {
       setCounts((prev) =>
         prev.map((val, i) => {
           const target = expData[i].amount;
-          const increment = Math.ceil(target / steps);
+          const increment = Math.max(1, Math.ceil(target / steps));
           const next = val + increment;
           return next >= target ? target : next;
         })
       );
     }, interval);
 
-    // Stop counting after full duration
-    const stopTimer = setTimeout(() => clearInterval(counterTimer), duration);
+    const stopTimer = setTimeout(() => clearInterval(counterTimer), duration + 500);
 
     return () => {
       clearTimeout(mountTimer);
@@ -50,32 +50,47 @@ export default function ExpBlock() {
   }, []);
 
   return (
-    <div
-      className="flex flex-wrap w-full justify-around items-center gap-6
-                 border border-blue-400 rounded-2xl p-6
-                 text-theme-primary bg-theme-secondary/30
-                 backdrop-blur-md shadow-md transition-all duration-500"
+    <section
+      className="
+        relative w-full max-w-5xl mx-auto
+        py-[clamp(1.5rem,4vw,3rem)]
+        px-[clamp(1rem,3vw,2rem)]
+        flex flex-wrap justify-center items-center gap-[clamp(1rem,3vw,2.5rem)]
+        rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl
+        shadow-[0_4px_40px_rgba(0,0,0,0.15)]
+        transition-all duration-700
+      "
     >
       {expData.map((exp, i) => (
         <div
           key={exp.label}
-          className={`flex flex-col justify-center items-center text-center w-40
-                      transform transition-all duration-700 ease-out
-                      ${mounted ? "opacity-100 scale-100" : "opacity-0 scale-75"}`}
+          className={`
+            flex flex-col justify-center items-center text-center
+            transform-gpu transition-all duration-700 ease-out
+            ${
+              mounted
+                ? "opacity-100 translate-y-0 scale-100"
+                : "opacity-0 translate-y-6 scale-95"
+            }
+          `}
         >
           <p
-            className="font-extrabold text-3xl sm:text-4xl md:text-5xl tracking-tight"
-            style={{ color: EXP_COLOR_CYCLE[i % EXP_COLOR_CYCLE.length] }}
+            className="font-extrabold tracking-tight text-[clamp(1.8rem,4vw,2.8rem)] leading-none"
+            style={{
+              color: EXP_COLOR_CYCLE[i % EXP_COLOR_CYCLE.length],
+              textShadow: "0 0 12px rgba(255,255,255,0.15)",
+            }}
             aria-label={`${exp.amount} ${exp.label}`}
           >
             {["projects completed", "clients"].includes(exp.label.toLowerCase()) && "~"}
             {counts[i]}+
           </p>
-          <p className="text-xs sm:text-sm mt-2 text-theme-primary/80 font-light italic">
+
+          <p className="text-[clamp(0.7rem,1.2vw,0.95rem)] mt-2 text-white/80 font-light italic">
             {exp.label}
           </p>
         </div>
       ))}
-    </div>
+    </section>
   );
 }
