@@ -4,6 +4,7 @@ import React, { useRef } from 'react'
 import { motion, useInView } from 'framer-motion';
 import MiniCarousel from '../MiniCarousel';
 import { CarouselType } from '@/app/lib/definitions';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Self-contained HomeAchievements that demonstrates usage.
@@ -14,13 +15,41 @@ const HomeAchievements: React.FC = () => {
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
   const items: CarouselType[] = [
-    { tag: 'UI', title: 'Portfolio Website', label: 'Personal', from: '2023', to: 'Present' },
-    { tag: 'API', title: 'Auth Service', label: 'Backend', from: '2022', to: '2023' },
-    { tag: 'DB', title: 'Postgres Setup', label: 'Database', from: '2021', to: '2022' },
-    { tag: 'Micro', title: 'Event System', label: 'Microservices', from: '2022', to: '2023' },
-    { tag: 'AI', title: 'Content Assistant', label: 'AI/ML', from: '2023', to: 'Present' },
-    { tag: 'Tool', title: 'Deployment Workflow', label: 'DevOps', from: '2022', to: '2023' },
-  ]
+
+    {
+      id: uuidv4(),
+      tag: ["AWS", "Certificate"],
+      title: "Certified Developer Associate",
+      label: "...",
+      from: "2024",
+      to: "2027",
+    },
+
+    {
+      id: uuidv4(),
+      tag: ["Award"],
+      title: "Hackathon Winner",
+      label: "",
+      from: "2021",
+      to: "2021",
+    },
+    {
+      id: uuidv4(),
+      tag: ["HILTI", "Award"],
+      title: "HILTI Dev Competition",
+      label: "",
+      from: "2020",
+      to: "2020",
+    },
+    {
+      id: uuidv4(),
+      tag: ["AWS", "Cloud day"],
+      title: "AWS Dev Booth",
+      label: "",
+      from: "2024",
+      to: "2024",
+    }
+  ];
 
   return (
     <motion.section
@@ -71,7 +100,7 @@ const HomeAchievements: React.FC = () => {
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6, delay: 0.12, ease: 'easeOut' }}
       >
-        Achievements
+        Achievements and Certifications
       </motion.p>
 
       {/* Carousel row */}

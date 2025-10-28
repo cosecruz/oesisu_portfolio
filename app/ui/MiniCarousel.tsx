@@ -1,164 +1,186 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useId } from "react";
+import Link from "next/link";
+import { motion, Variants, useReducedMotion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import type { CarouselType } from "../lib/definitions";
+import { cn } from "@/lib/utils";
+import { TagList } from "./TagList";
 
 interface MiniCarouselProps {
   items: CarouselType[];
+  className?: string;
 }
 
-/**
- * Smart responsive carousel with animated cards.
- * - Vertical (2 visible) on mobile
- * - Horizontal (2–5 visible) on larger screens
- * - Subtle scale + shadow on hover
- * - Staggered fade-in on scroll
- */
-const MiniCarousel: React.FC<MiniCarouselProps> = ({ items }) => {
+const MiniCarousel: React.FC<MiniCarouselProps> = React.memo(({ items, className }) => {
+  const prefersReducedMotion = useReducedMotion();
+  const carouselId = useId();
+
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.1 },
+    },
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 20, scale: 0.96 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.45, ease: "easeOut" },
+    },
+  };
+
   return (
     <motion.div
-      className="
-        relative w-full max-w-full
-        flex flex-col sm:flex-row
-        overflow-y-auto sm:overflow-x-auto
-        snap-y sm:snap-x snap-mandatory
-        gap-4 sm:gap-6
-        py-4 px-2
-        items-center justify-center
-        min-w-0
-        /* mobile: height set so exactly 2 cards show (2 x card height + gaps) */
-        h-[calc(2*11.5rem+1rem)] sm:h-auto
-      "
+      id={carouselId}
       role="region"
       aria-roledescription="carousel"
-      aria-label="Experience carousel"
+      aria-label="Experience showcase"
+      className={cn(
+        "relative w-full",
+        "flex flex-col sm:flex-row",
+        "overflow-y-auto sm:overflow-x-auto",
+        "snap-y sm:snap-x snap-mandatory",
+        "scroll-smooth min-w-0 custom-scrollbar",
+        "gap-4 sm:gap-6 py-4 px-2",
+        "max-h-[calc(2*15rem+1rem)] sm:max-h-none", // show 2 on small screens
+        className
+      )}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-60px" }}
-      variants={{
-        hidden: { opacity: 0, y: 30 },
-        visible: {
-          opacity: 1,
-          y: 0,
-          transition: { staggerChildren: 0.1, duration: 0.6, ease: "easeOut" },
-        },
-      }}
+      variants={prefersReducedMotion ? {} : containerVariants}
     >
-      {items.map((item, index) => (
-        <motion.div
-          key={index}
-          variants={{
-            hidden: { opacity: 0, y: 20, scale: 0.97 },
-            visible: { opacity: 1, y: 0, scale: 1 },
-          }}
-          whileHover={{
-            y: -8,
-            scale: 1.04,
-            boxShadow: "0 18px 48px rgba(0,0,0,0.16)",
-            transition: { type: "spring", stiffness: 240, damping: 20 },
-          }}
-          className="
-            shrink-0 snap-center
-            w-full sm:w-[48%] md:w-[32%] lg:w-[24%] xl:w-[20%]
-            flex justify-center
-          "
-        >
-          <motion.div
-             whileHover={{
-              y: -8,
-              scale: 1.03,
-              boxShadow: "0 18px 48px rgba(0,0,0,0.16)",
-              transition: { type: "spring", stiffness: 240, damping: 20 },
-            }}
-            className="w-full max-w-full flex justify-center"
+      {items.map((item, index) => {
+        const itemId = `${carouselId}-item-${index}`;
+        const linkHref = `/me#${item.id ?? item.title.toLowerCase().replace(/\s+/g, "-")}`;
+        const tags = Array.isArray(item.tag) ? item.tag : item.tag ? [item.tag] : [];
+
+        return (
+          <motion.article
+            key={`${item.title}-${index}`}
+            variants={prefersReducedMotion ? {} : itemVariants}
+            whileHover={
+              prefersReducedMotion
+                ? {}
+                : {
+                    y: -6,
+                    scale: 1.04,
+                    transition: { type: "spring", stiffness: 300, damping: 20 },
+                  }
+            }
+            whileTap={{ scale: 0.97 }}
+            className={cn(
+              "shrink-0 snap-center",
+              "w-full sm:w-[48%] md:w-[32%] lg:w-[28%] xl:w-[24%]",
+              "min-w-0"
+            )}
+            role="group"
+            aria-roledescription="slide"
+            aria-labelledby={`${itemId}-title`}
           >
-            <Card
-            className="
-             relative w-full bg-indigo-800/6 backdrop-blur-xl
-                border-2 border-white/10
-                shadow-[0_8px_30px_rgba(9,10,11,0.18)]
-                transition-transform duration-200 ease-out
-                rounded-2xl overflow-hidden
-                flex
-                text-[clamp(0.72rem,1.1vw,0.95rem)]
-            "
-          >
-
-             {/* subtle top gloss */}
-              {/* <div className="pointer-events-none absolute inset-0 rounded-2xl">
-                <div className="absolute inset-0 bg-linear-to-t from-white/6 via-transparent to-white/2 opacity-30 mix-blend-screen" />
-              </div> */}
-            <CardContent
-              className="
-                relative z-10
-                  flex flex-col
-                  p-auto
-                  w-full h-auto
-                  aspect-4/3 sm:aspect-3/2 md:aspect-5/3
-                   "
-            >
-              <motion.span
-                initial={{ opacity: 0, y: -8 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.35 }}
-                className="
-                  text-accent uppercase tracking-wide font-medium
-                  text-[clamp(0.6rem,1.2vw,0.8rem)]
-                "
+            <Link href={linkHref} scroll>
+              <Card
+                tabIndex={0}
+                className={cn(
+                  "relative w-full h-full min-h-[13rem]",
+                  "bg-white/5 backdrop-blur-xl border border-white/10",
+                  "rounded-2xl overflow-hidden flex flex-col",
+                  "shadow-[0_6px_30px_rgba(0,0,0,0.12)]",
+                  "transition-transform duration-300",
+                  "hover:border-blue-400/40 hover:shadow-blue-500/20",
+                  "focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2"
+                )}
+                onClick={() =>
+                  document.getElementById(item.id ?? "")?.scrollIntoView({ behavior: "smooth" })
+                }
               >
-                {item.tag}
-              </motion.span>
+                {/* Gloss overlay */}
+                <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-white/5 opacity-25 mix-blend-overlay" />
+                </div>
 
-              <motion.h3
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.35, delay: 0.15 }}
-                className="
-                  font-semibold bg-linear-to-t from-violet-400 to-blue-500
-    bg-clip-text text-transparent mt-2 line-clamp-2
-                  text-[clamp(0.8rem,1.6vw,1.1rem)]
-                "
-              >
-                {item.title}
-              </motion.h3>
+                <CardContent className="relative z-10 flex flex-col justify-between text-center sm:text-left p-4 sm:p-5 h-full">
 
-              {item.label && (
-                <motion.span
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.2 }}
-                  className="
-                    text-muted-foreground mt-1
-                    text-[clamp(0.7rem,1.4vw,0.9rem)]
-                  "
-                >
-                  {item.label}
-                </motion.span>
-              )}
 
-              {(item.from || item.to) && (
-                <motion.span
-                  initial={{ opacity: 0, y: 10 }}
+                  {/* ✅ Tags with subtle glassy fade */}
+                  {item.tag?.length > 0 && <TagList tags={item.tag} className="justify-start text-blue-200"  delay={0.25} maxVisible={3} />}
+
+
+
+
+                  {/* Title */}
+                  <motion.h3
+                    id={`${itemId}-title`}
+                    initial={{ opacity: 0, y: 8 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.45, delay: 0.25 }}
-                  className="
-                    text-accent mt-1
-                    text-[clamp(0.65rem,1.3vw,0.85rem)]
-                  "
-                >
-                  {item.from} {item.to && ` - ${item.to}`}
-                </motion.span>
-              )}
-            </CardContent>
-          </Card>
-          </motion.div>
+                    transition={{ delay: 0.25 }}
+                    className={cn(
+                      "font-bold leading-tight tracking-tight mb-1.5 line-clamp-2",
+                      "bg-gradient-to-r from-violet-400 to-blue-500 bg-clip-text text-transparent",
+                      "text-sm sm:text-base lg:text-lg"
+                    )}
+                  >
+                    {item.title}
+                  </motion.h3>
 
-        </motion.div>
-      ))}
+                  {/* Label */}
+                  {item.label && (
+                    <motion.span
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      transition={{ delay: 0.3 }}
+                      className="text-white/75 font-medium text-xs sm:text-sm mb-2 truncate"
+                    >
+                      {item.label}
+                    </motion.span>
+                  )}
+
+                  {/* Description */}
+                  {item.description && (
+                    <motion.p
+                      id={`${itemId}-desc`}
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      transition={{ delay: 0.35 }}
+                      className="text-white/70 text-xs sm:text-sm leading-relaxed line-clamp-3 sm:line-clamp-4"
+                    >
+                      {item.description}
+                    </motion.p>
+                  )}
+
+                  {/* Dates */}
+                  {(item.from || item.to) && (
+                    <motion.time
+                      initial={{ opacity: 0, y: 6 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4 }}
+                      className="mt-auto pt-2 text-xs sm:text-sm font-semibold text-blue-400 tracking-wide"
+                    >
+                      {item.from}
+                      {item.to && (
+                        <>
+                          {" "}
+                          <span className="text-white/50">—</span> {item.to}
+                        </>
+                      )}
+                    </motion.time>
+                  )}
+                </CardContent>
+              </Card>
+            </Link>
+          </motion.article>
+        );
+      })}
     </motion.div>
   );
-};
+});
 
-export default React.memo(MiniCarousel);
+MiniCarousel.displayName = "MiniCarousel";
+export default MiniCarousel;

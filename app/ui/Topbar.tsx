@@ -1,58 +1,33 @@
 "use client";
 
-import React from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
-interface TopbarProps {
-  admin: boolean;
-}
-
-export default function Topbar({ admin }: TopbarProps) {
+export default function Topbar({ admin }: { admin: boolean }) {
   const pathname = usePathname();
-  const isCollapsed = typeof window !== "undefined" && window.innerWidth < 640;
 
   return (
-    <header className="w-full h-14 flex items-center px-4 justify-between bg-theme-main border-b border-theme">
-      <div className="flex gap-2 items-center">
-        <Image
-          className={`object-contain  ${isCollapsed ? "block" : "hidden"}`}
-          src="/oesisuicon.svg"
-          alt="Oesisu logo"
-          width={16}
-          height={16}
-          title={"oesisu logo"}
-          loading="eager"
-          style={{ width: "auto", height: "auto" }} // Fix aspect ratio warning
-          priority={false}
-        />
-        <span className="flex text-sm font-semibold text-theme-primary">
-          OESISU
-          {admin && (
-            <p className="text-sm font-semibold text-amber-200 ml-2">@Admin</p>
-          )}
+    <header className="h-14 flex items-center justify-between px-4 sm:px-6 md:px-8 bg-sidebar/90 backdrop-blur-md border-b border-main shadow-sm">
+      <div className="flex items-center gap-3">
+        {/* Logo visible only on small screens */}
+        <div className="sm:hidden flex items-center gap-2">
+          <Image src="/oesisuicon.svg" alt="Logo" width={20} height={20} />
+          <span className="font-semibold text-sm text-white/90">OESISU</span>
+        </div>
+
+        {/* Page indicator */}
+        <span className="hidden sm:inline-block font-semibold text-white/90 tracking-wide">
+          OESISU{" "}
+          {admin && <span className="text-amber-300 text-xs align-super">@Admin</span>}
         </span>
-        <button
-          className="p-1 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] rounded"
-          aria-label="User options"
-        >
-          <Image
-            src="/arrowdropdown.svg"
-            alt="Dropdown"
-            width={10}
-            height={10}
-          />
-        </button>
       </div>
 
-      <div className="flex items-center space-x-3 text-theme-secondary text-sm">
-        <Image
-          src="/search.svg"
-          alt="Search"
-          width={16}
-          height={16}
-        />
-      </div>
+      <button
+        className="p-2 rounded-lg hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        aria-label="Search"
+      >
+        <Image src="/search.svg" alt="Search" width={18} height={18} />
+      </button>
     </header>
   );
 }

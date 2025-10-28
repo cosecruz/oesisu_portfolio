@@ -1,161 +1,140 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useEffect, memo } from "react";
+import { motion } from "framer-motion";
+import { Menu, PanelLeft, X, Terminal, Languages } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu } from "lucide-react";
 import Navbar from "./Navbar";
-import { NavListInfo } from "../lib/definitions";
+import { cn } from "@/lib/utils";
+import type { NavListInfo } from "../lib/definitions";
+import { useSidebarStore } from "../store/sidebar.store";
 
-interface SidebarProps {
-  navs: NavListInfo[];
-}
+const variants = {
+  open: { width: 256 },
+  collapsed: { width: 64 },
+  hidden: { width: 0 },
+};
 
-export default function Sidebar({ navs }: SidebarProps) {
-  const [collapsed, setCollapsed] = useState(false);
-  const [isOpen, setIsOpen] = useState(true);
-  const [hydrated, setHydrated] = useState(false);
+export const Sidebar = memo(function Sidebar({ navs }: { navs: NavListInfo[] }) {
+  const {
+    isCollapsed,
+    isMobile,
+    isMobileOpen,
+    toggle,
+    setMobile,
+    setCollapsed,
+  } = useSidebarStore();
 
+  // Detect viewport and sync
   useEffect(() => {
-    // Wait one tick before marking hydrated — avoids React’s synchronous warning
-    const id = requestAnimationFrame(() => {
-      setHydrated(true);
+    const check = () => setMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check, { passive: true });
+    return () => window.removeEventListener("resize", check);
+  }, [setMobile]);
 
-      const handleResize = () => {
-        const isMobile = window.innerWidth < 640;
-        setCollapsed(isMobile);
-        setIsOpen(!isMobile);
-      };
-
-      handleResize();
-      window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize);
-    });
-
-    return () => cancelAnimationFrame(id);
-  }, []);
-
-  const toggleSidebar = useCallback(() => {
-    if (typeof window === "undefined") return;
-
-    const isMobile = window.innerWidth < 640;
-    if (isMobile) {
-      setIsOpen((prev) => !prev);
-      setCollapsed(false);
-    } else {
-      setCollapsed((prev) => !prev);
-    }
-  }, []);
-
-  if (!hydrated) {
+  // --- Mobile floating hamburger ---
+  if (isMobile && !isMobileOpen) {
     return (
-      <div className="fixed top-4 left-4 p-2">
-        <Menu className="w-6 h-6 text-theme-primary" />
-      </div>
+      <button
+        onClick={toggle}
+        className="fixed left-4 top-10 z-50 rounded-lg bg-sidebar/80 p-2 text-white shadow-lg hover:bg-sidebar/90 focus-visible:ring-2 focus-visible:ring-accent"
+        type="button"
+        aria-label="Open sidebar"
+        title="Open sidebar"
+      >
+        <Menu className="h-6 w-6" />
+      </button>
     );
   }
 
   return (
     <>
-      {!isOpen && (
-        <button
-          className="fixed top-4 left-4 z-50 text-theme-primary hover:text-accent focus:outline-none focus:ring-2 focus:ring-(--accent) p-2 rounded"
-          onClick={toggleSidebar}
-          title="Toggle sidebar"
-          aria-label="Toggle sidebar"
-        >
-          <Menu className="w-6 h-6 mt-6" />
-        </button>
-      )}
-
-      <aside
-        className={`sidebar bg-theme-secondary border-r border-theme flex flex-col transition-all duration-300 z-50 ${
-          isOpen ? (collapsed ? "collapsed" : "expanded") : "hidden"
-        } md:expanded md:static fixed top-0 left-0 min-h-screen overflow-x-hidden`}
+      {/* Sidebar (motion width anim) */}
+      <motion.aside
+        variants={variants}
+        initial={false}
+        animate={
+          isMobile
+            ? isMobileOpen
+              ? "open"
+              : "hidden"
+            : isCollapsed
+            ? "collapsed"
+            : "open"
+        }
+        transition={{ type: "spring", stiffness: 260, damping: 25 }}
+        className={cn(
+          "fixed inset-y-0 left-0 z-40 flex flex-col bg-sidebar/90 backdrop-blur-xl border-r border-border shadow-lg",
+          isMobile && !isMobileOpen && "w-0 overflow-hidden",
+          isMobile && isMobileOpen && "w-64"
+        )}
       >
-        <div className="flex items-center justify-between p-3 border-b border-theme">
-          {!collapsed && (
-            <Link href="/" className="flex items-center">
-              <Image
-                className="object-contain"
-                src="/oesisuicon.svg"
-                loading="eager"
-                alt="Oesisu logo"
-                title={"oesisu logo"}
-                width={24}
-                height={24}
-                style={{ width: "auto", height: "auto" }} // Fix aspect ratio warning
-                              priority={false}
-              />
+        <header className="flex items-center justify-between border-b border-border p-4">
+          <Link href="/" className="flex items-center gap-2">
+            {/* ✅ Leave your logo exactly as-is */}
+            <Image src="/oesisuicon.svg" alt="OESISU" width={16} height={16} />
+          </Link>
+          <button
+            onClick={toggle}
+            className="rounded p-1 text-main hover:text-accent focus-visible:ring-2 focus-visible:ring-accent"
+            aria-label="Toggle sidebar"
+            title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {isMobile ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <PanelLeft className="h-5 w-5" />
+            )}
+          </button>
+        </header>
 
-            </Link>
-          )}
-          <div className="icon_container flex justify-center">
-            <button
-              onClick={toggleSidebar}
-              className="text-theme-primary hover:text-(--accent) focus:outline-none focus:ring-2 focus:ring-(--accent) p-1 rounded"
-              title="Toggle sidebar"
-              aria-label="Toggle sidebar"
-            >
-              {collapsed ? (
-                <Menu className="w-6 h-6" />
-              ) : (
-                <Image
-                  src="/dock_to_right.svg"
-                  alt="Toggle sidebar"
-                  width={20}
-                  height={16}
-                  className="items-center"
-                />
-              )}
-            </button>
-          </div>
-        </div>
+        <nav className="flex-1 overflow-y-auto p-3 scrollbar-hide">
+          <Navbar collapsed={isCollapsed && !isMobile} navList={navs} />
+        </nav>
 
-        <div className="flex-1 my-4 overflow-y-auto overflow-x-hidden">
-          <Navbar collapsed={collapsed} navList={navs} />
-        </div>
+        <footer
+  className={cn(
+    // Hide on small screens
+    "hidden md:flex border-t border-border p-3 transition-all duration-300",
+    // Layout depends on sidebar state
+    isCollapsed
+      ? "flex-col items-center justify-center gap-3"
+      : "flex-row items-center justify-between gap-3"
+  )}
+>
+  {/* Terminal Button */}
+  <button
+    className="rounded p-2 text-main transition-colors hover:bg-(--color-bg-card) hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+    aria-label="Terminal"
+    title="Terminal"
+    type="button"
+  >
+    <Terminal className="h-5 w-5" />
+  </button>
 
+  {/* Language Button */}
+  <button
+    className="rounded p-2 text-main transition-colors hover:bg-(--color-bg-card) hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+    aria-label="Language"
+    title="Language"
+    type="button"
+  >
+    <Languages className="h-5 w-5" />
+  </button>
+</footer>
+
+      </motion.aside>
+
+      {/* === MOBILE: Backdrop overlay === */}
+      {isMobile && isMobileOpen && (
         <div
-          className={`flex ${
-            collapsed
-              ? "flex-col items-center"
-              : "flex-row items-center justify-between"
-          } p-3 border-t border-theme mt-auto`}
-        >
-          <div className="icon_container flex justify-center">
-            <button
-              className="text-theme-primary hover:text-(--accent) focus:outline-none focus:ring-2 focus:ring-(--accent) p-1 rounded"
-              title="Open terminal"
-              aria-label="Open terminal"
-            >
-              <Image
-                src="/terminal.svg"
-                alt="Terminal"
-                width={20}
-                height={16}
-                className="items-center"
-              />
-            </button>
-          </div>
-
-          <div className="icon_container flex justify-center">
-            <button
-              className="text-theme-primary hover:text-(--accent) focus:outline-none focus:ring-2 focus:ring-(--accent) p-1 rounded mt-2 sm:mt-0"
-              title="Change language"
-              aria-label="Change language"
-            >
-              <Image
-                src="/lang.svg"
-                alt="Language"
-                width={20}
-                height={16}
-                className="items-center"
-              />
-            </button>
-          </div>
-        </div>
-      </aside>
+          className="fixed inset-0 z-30 bg-black/40 backdrop-blur-sm"
+          onClick={toggle}
+          aria-hidden="true"
+        />
+      )}
     </>
   );
-}
+});

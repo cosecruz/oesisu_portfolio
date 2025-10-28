@@ -1,8 +1,8 @@
 export interface NavListInfo {
   id: string;
   label: string;
-  iconUrl:string
   href?: string;
+  icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   hasDropdown?: boolean;
   dropdownItems?: { label: string; href: string }[];
 }
@@ -13,8 +13,10 @@ export interface Role {
 }
 
 export interface CarouselType {
-  tag: string;
+  id: string;
+  tag: string[];
   title: string;
+  description?: string;
   label?: string;
   from?: string;
   to?: string;
