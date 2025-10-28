@@ -1,170 +1,163 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { motion, Variants } from "framer-motion";
+import React from "react";
+import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-  CarouselApi,
-} from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
 import type { CarouselType } from "../lib/definitions";
-
-const itemVariants: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 20,
-    scale: 0.97,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.45,
-      ease: "easeInOut",
-    },
-  },
-  exit: {
-    opacity: 0,
-    y: -20,
-    scale: 0.97,
-    transition: {
-      duration: 0.35,
-      ease: "easeInOut",
-    },
-  },
-  hover: {
-    scale: 1.03,
-    boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
-    transition: {
-      duration: 0.18,
-      ease: "easeOut",
-    },
-  },
-};
 
 interface MiniCarouselProps {
   items: CarouselType[];
 }
 
+/**
+ * Smart responsive carousel with animated cards.
+ * - Vertical (2 visible) on mobile
+ * - Horizontal (2–5 visible) on larger screens
+ * - Subtle scale + shadow on hover
+ * - Staggered fade-in on scroll
+ */
 const MiniCarousel: React.FC<MiniCarouselProps> = ({ items }) => {
-  const [api, setApi] = useState<CarouselApi | undefined>();
-  const [current, setCurrent] = useState(0);
-  const autoplay = useRef(Autoplay({ delay: 4000, stopOnInteraction: false }));
-
-useEffect(() => {
-  if (!api) return;
-
-  const onSelect = () => {
-    setCurrent(api.selectedScrollSnap());
-  };
-
-  api.on("select", onSelect);
-
-  // ✅ Proper cleanup function (returns void)
-  return () => {
-    api.off("select", onSelect);
-  };
-}, [api]);
-
-  const handleMouseEnter = () => autoplay.current.stop();
-  const handleMouseLeave = () => autoplay.current.play();
-
   return (
-    <div
-      className="relative w-full max-w-full overflow-hidden mx-auto"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+    <motion.div
+      className="
+        relative w-full max-w-full
+        flex flex-col sm:flex-row
+        overflow-y-auto sm:overflow-x-auto
+        snap-y sm:snap-x snap-mandatory
+        gap-4 sm:gap-6
+        py-4 px-2
+        items-center justify-center
+        min-w-0
+        /* mobile: height set so exactly 2 cards show (2 x card height + gaps) */
+        h-[calc(2*11.5rem+1rem)] sm:h-auto
+      "
       role="region"
       aria-roledescription="carousel"
-      aria-label="Project carousel"
+      aria-label="Experience carousel"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-60px" }}
+      variants={{
+        hidden: { opacity: 0, y: 30 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: { staggerChildren: 0.1, duration: 0.6, ease: "easeOut" },
+        },
+      }}
     >
-      <Carousel
-        setApi={setApi}
-        opts={{
-          align: "center",
-          loop: true,
-        }}
-        plugins={[autoplay.current]}
-        className="w-full"
-      >
-        <CarouselContent className="-ml-2 md:-ml-4">
-          {items.map((item, index) => (
-            <CarouselItem
-              key={index}
+      {items.map((item, index) => (
+        <motion.div
+          key={index}
+          variants={{
+            hidden: { opacity: 0, y: 20, scale: 0.97 },
+            visible: { opacity: 1, y: 0, scale: 1 },
+          }}
+          whileHover={{
+            y: -8,
+            scale: 1.04,
+            boxShadow: "0 18px 48px rgba(0,0,0,0.16)",
+            transition: { type: "spring", stiffness: 240, damping: 20 },
+          }}
+          className="
+            shrink-0 snap-center
+            w-full sm:w-[48%] md:w-[32%] lg:w-[24%] xl:w-[20%]
+            flex justify-center
+          "
+        >
+          <motion.div
+             whileHover={{
+              y: -8,
+              scale: 1.03,
+              boxShadow: "0 18px 48px rgba(0,0,0,0.16)",
+              transition: { type: "spring", stiffness: 240, damping: 20 },
+            }}
+            className="w-full max-w-full flex justify-center"
+          >
+            <Card
+            className="
+             relative w-full bg-indigo-800/6 backdrop-blur-xl
+                border-2 border-white/10
+                shadow-[0_8px_30px_rgba(9,10,11,0.18)]
+                transition-transform duration-200 ease-out
+                rounded-2xl overflow-hidden
+                flex
+                text-[clamp(0.72rem,1.1vw,0.95rem)]
+            "
+          >
+
+             {/* subtle top gloss */}
+              {/* <div className="pointer-events-none absolute inset-0 rounded-2xl">
+                <div className="absolute inset-0 bg-linear-to-t from-white/6 via-transparent to-white/2 opacity-30 mix-blend-screen" />
+              </div> */}
+            <CardContent
               className="
-                 basis-full
-                  sm:basis-3/4
-                  md:basis-1/2
-                  lg:basis-1/3
-                  xl:basis-1/4
-                  pl-2 md:pl-4
-              "
+                relative z-10
+                  flex flex-col
+                  p-auto
+                  w-full h-auto
+                  aspect-4/3 sm:aspect-3/2 md:aspect-5/3
+                   "
             >
-              <motion.div
-                variants={itemVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                whileHover="hover"
-                className="h-full"
-                tabIndex={0}
-                aria-current={index === current ? "true" : undefined}
-                aria-label={`${item.title} ${item.tag}`}
+              <motion.span
+                initial={{ opacity: 0, y: -8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.35 }}
+                className="
+                  text-accent uppercase tracking-wide font-medium
+                  text-[clamp(0.6rem,1.2vw,0.8rem)]
+                "
               >
-                <Card className="w-full h-full bg-card border border-border shadow-sm hover:shadow-md transition-all duration-300">
-                  <CardContent className="flex flex-col items-center justify-center p-3 sm:p-4 text-center h-auto min-h-[140px] sm:min-h-[180px] md:min-h-[200px]">
-                    <span className="text-accent text-xs uppercase tracking-wide font-medium">
-                      {item.tag}
-                    </span>
-                    <h3 className="text-sm sm:text-base md:text-lg font-semibold text-foreground mt-2 line-clamp-2">
-                      {item.title}
-                    </h3>
-                    {item.label && (
-                      <span className="text-xs text-muted-foreground mt-1">
-                        {item.label}
-                      </span>
-                    )}
-                    {(item.from || item.to) && (
-                      <span className="text-xs text-muted-foreground mt-1">
-                        {item.from} {item.to && ` - ${item.to}`}
-                      </span>
-                    )}
-                  </CardContent>
-                </Card>
-              </motion.div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
+                {item.tag}
+              </motion.span>
 
-        <CarouselPrevious
-          className="bg-muted/30 hover:bg-muted/50 backdrop-blur-sm text-foreground rounded-full w-8 h-8 md:w-10 md:h-10"
-          aria-label="Previous slide"
-        />
-        <CarouselNext
-          className="bg-muted/30 hover:bg-muted/50 backdrop-blur-sm text-foreground rounded-full w-8 h-8 md:w-10 md:h-10"
-          aria-label="Next slide"
-        />
-      </Carousel>
+              <motion.h3
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35, delay: 0.15 }}
+                className="
+                  font-semibold bg-linear-to-t from-violet-400 to-blue-500
+    bg-clip-text text-transparent mt-2 line-clamp-2
+                  text-[clamp(0.8rem,1.6vw,1.1rem)]
+                "
+              >
+                {item.title}
+              </motion.h3>
 
-      <div className="absolute -bottom-6 left-0 right-0 flex justify-center gap-2">
-        {items.map((_, index) => (
-          <button
-            key={index}
-            className={`w-2 h-2 rounded-full transition-all ${
-              index === current ? "bg-accent scale-125" : "bg-muted/50 hover:bg-muted"
-            }`}
-            onClick={() => api?.scrollTo(index)}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
-      </div>
-    </div>
+              {item.label && (
+                <motion.span
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.2 }}
+                  className="
+                    text-muted-foreground mt-1
+                    text-[clamp(0.7rem,1.4vw,0.9rem)]
+                  "
+                >
+                  {item.label}
+                </motion.span>
+              )}
+
+              {(item.from || item.to) && (
+                <motion.span
+                  initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay: 0.25 }}
+                  className="
+                    text-accent mt-1
+                    text-[clamp(0.65rem,1.3vw,0.85rem)]
+                  "
+                >
+                  {item.from} {item.to && ` - ${item.to}`}
+                </motion.span>
+              )}
+            </CardContent>
+          </Card>
+          </motion.div>
+
+        </motion.div>
+      ))}
+    </motion.div>
   );
 };
 

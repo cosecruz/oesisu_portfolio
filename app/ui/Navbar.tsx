@@ -45,7 +45,7 @@ function Navbar({ collapsed, navList }: NavbarProps) {
         const content = (
           <div
             className={`flex items-center gap-2 p-1.5 rounded-md transition-colors sidebar-item group
-              ${nav.href ? "cursor-pointer hover:bg-(--muted)" : "cursor-default"}
+              ${nav.href ? "cursor-pointer hover:bg-(--accent-hover)" : "cursor-default"}
               ${isActive ? "bg-(--accent) text-white" : ""}
               ${collapsed ? "justify-center flex-col" : "justify-between"}`}
           >

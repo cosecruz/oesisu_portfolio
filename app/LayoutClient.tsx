@@ -22,7 +22,7 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
 
   <div className="flex flex-col flex-1 bg-main transition-all duration-300">
     <Topbar admin={isAdmin} />
-    <main className="flex-1 overflow-y-auto p-4 sm:p-6">{children}</main>
+    <main className="flex-1 overflow-y-auto p-6 min-w-0">{children}</main>
   </div>
 </div>
   );

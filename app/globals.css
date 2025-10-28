@@ -35,11 +35,11 @@
   --text-secondary: #9CA3AF;
 
   /* Accent / brand color (ChatGPT green-ish) */
-  --accent: oklch(44.144% 0.00391 16.601);
+  --accent: oklch(62.733% 0.30691 316.377);
   --accent-hover: #4f18e6;
 
   --border-color: #3a3545;
-  --muted: oklch(0.97 0 0);
+  --muted: oklch(65.432% .00688 16.641);
   --scrollbar: #565869;
   --violet-500-20: rgba(139, 92, 246, 0.2);
   --violet-600: #7c3aed;

@@ -6,27 +6,20 @@ import MiniCarousel from '../MiniCarousel';
 import { CarouselType } from '@/app/lib/definitions';
 
 /**
- * Self-contained HomeExp that demonstrates usage.
+ * Self-contained HomeAchievements that demonstrates usage.
  * Re-declare items locally and pass to MiniCarousel.
  */
-const HomeExp: React.FC = () => {
+const HomeAchievements: React.FC = () => {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
-  // const items: CarouselType[] = [
-  //   { tag: 'UI', title: 'Portfolio Website', label: 'Personal', from: '2023', to: 'Present' },
-  //   { tag: 'API', title: 'Auth Service', label: 'Backend', from: '2022', to: '2023' },
-  //   { tag: 'DB', title: 'Postgres Setup', label: 'Database', from: '2021', to: '2022' },
-  //   { tag: 'Micro', title: 'Event System', label: 'Microservices', from: '2022', to: '2023' },
-  //   { tag: 'AI', title: 'Content Assistant', label: 'AI/ML', from: '2023', to: 'Present' },
-  //   { tag: 'Tool', title: 'Deployment Workflow', label: 'DevOps', from: '2022', to: '2023' },
-  // ]
-
   const items: CarouselType[] = [
-    { tag: 'Education', title: 'University Putra Malaysia', label: 'Bachelor of Software Engineering', from: '2018', to: '2022' },
-    { tag: 'Work', title: 'eCloudValley', label: 'Cloud Developer Intern', from: '2024', to: '2024' },
-    { tag: '  Work', title: 'Freelance', label: '', from: '2018', to: 'now' },
-    { tag: 'Work', title: 'Thee', label: 'Senior Software Engineer', from: '2025', to: 'now' },
+    { tag: 'UI', title: 'Portfolio Website', label: 'Personal', from: '2023', to: 'Present' },
+    { tag: 'API', title: 'Auth Service', label: 'Backend', from: '2022', to: '2023' },
+    { tag: 'DB', title: 'Postgres Setup', label: 'Database', from: '2021', to: '2022' },
+    { tag: 'Micro', title: 'Event System', label: 'Microservices', from: '2022', to: '2023' },
+    { tag: 'AI', title: 'Content Assistant', label: 'AI/ML', from: '2023', to: 'Present' },
+    { tag: 'Tool', title: 'Deployment Workflow', label: 'DevOps', from: '2022', to: '2023' },
   ]
 
   return (
@@ -78,7 +71,7 @@ const HomeExp: React.FC = () => {
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6, delay: 0.12, ease: 'easeOut' }}
       >
-        Experience
+        Achievements
       </motion.p>
 
       {/* Carousel row */}
@@ -109,4 +102,4 @@ const HomeExp: React.FC = () => {
   )
 }
 
-export default HomeExp
+export default HomeAchievements

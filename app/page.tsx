@@ -5,6 +5,12 @@ import { motion } from "framer-motion";
 import RoleShowcase from "./ui/Home/RoleShowcase";
 import ExpBlock from "./ui/Home/ExpBlock";
 import HomeExp from "./ui/Home/HomeExp";
+import HomeProjects from "./ui/Home/HomeProjects";
+import HomeSkillsandTech from "./ui/Home/HomeSkillsandTech";
+import HomeAchievements from "./ui/Home/HomeAchievements";
+import HomeGoals from "./ui/Home/HomeGoals";
+import HomeSponsors from "./ui/Home/HomeSponsors";
+import HomeContacts from "./ui/Home/HomeContacts";
 
 export default function Home() {
   return (
@@ -107,14 +113,127 @@ export default function Home() {
         </p>
       </motion.section>
 
+      {/* quote */}
+      <motion.section
+        className="mx-auto px-3 w-full"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.7, delay: 0.3 }}
+      >
+        <p className="justify-start text-sm sm:text-base italic text-theme-primary/90 leading-relaxed">
+          &quot;It’s not magic — it took years of learning.&quot;
+        </p>
+      </motion.section>
+
       {/*  === Experience Section ===*/}
       <motion.section
-        className=""
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.3 }}
       >
         <HomeExp />
+      </motion.section>
+
+      {/* Project Section */}
+       <motion.section
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.3 }}
+      >
+        <HomeProjects />
+      </motion.section>
+
+      {/* Skill Section */}
+       <motion.section
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.3 }}
+      >
+        <HomeSkillsandTech />
+      </motion.section>
+
+       {/* quote */}
+      <motion.section
+        className="mx-auto px-3 w-full"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.7, delay: 0.3 }}
+      >
+        <p className="justify-start text-sm sm:text-base italic text-theme-primary/90 leading-relaxed">
+          &quot;Told you it wasn’t a walk in the park, so lets look at what was gained&quot;
+        </p>
+      </motion.section>
+
+      {/* Achievement Section */}
+       <motion.section
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.3 }}
+      >
+        <HomeAchievements />
+      </motion.section>
+
+       {/* quote */}
+      <motion.section
+        className="mx-auto px-3 w-full"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.7, delay: 0.3 }}
+      >
+        <p className="justify-start text-sm sm:text-base italic text-theme-primary/90 leading-relaxed">
+          &quot;Cool, so what’s next you ask&quot;
+        </p>
+      </motion.section>
+
+      {/* Goals Section */}
+       <motion.section
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.3 }}
+      >
+        <HomeGoals />
+      </motion.section>
+
+       {/* quote */}
+      <motion.section
+        className="mx-auto px-3 w-full"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.7, delay: 0.3 }}
+      >
+        <p className="justify-start text-sm sm:text-base italic text-theme-primary/90 leading-relaxed">
+          &quot;Don&apos;t forget the shout outs, that&apos;s why you are where you are&quot;
+        </p>
+      </motion.section>
+
+      {/* Sponsors Section */}
+       <motion.section
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.3 }}
+      >
+        <HomeSponsors />
+      </motion.section>
+
+       {/* quote */}
+      <motion.section
+        className="mx-auto px-3 w-full"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.7, delay: 0.3 }}
+      >
+        <p className="justify-start text-sm sm:text-base italic text-theme-primary/90 leading-relaxed">
+          &quot;And one last tiny bit detail before you go&quot;
+        </p>
+      </motion.section>
+
+      {/* Contact Section */}
+       <motion.section
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.3 }}
+      >
+        <HomeContacts />
       </motion.section>
     </main>
   );

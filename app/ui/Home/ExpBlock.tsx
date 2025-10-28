@@ -13,7 +13,7 @@ const expData: ExpDataType[] = [
   { label: "Projects Completed", amount: 15 },
   { label: "Clients", amount: 10 },
   { label: "Students Mentored", amount: 3 },
-  { label: "Certifications", amount: 1 },
+  { label: "Certifications", amount: 5 },
 ];
 
 export default function ExpBlock() {
@@ -24,8 +24,8 @@ export default function ExpBlock() {
     // ✅ Defer setMounted to the next tick to avoid "cascading renders"
     const mountTimer = setTimeout(() => setMounted(true), 0);
 
-    const duration = 2000; // total animation time (ms)
-    const steps = 40;
+    const duration = 5000; // total animation time (ms)
+    const steps = 70;
     const interval = duration / steps;
 
     const counterTimer = setInterval(() => {
