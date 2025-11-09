@@ -1,32 +1,58 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { motion } from "framer-motion";
 
 interface ExpDataType {
   label: string;
   amount: number;
+  prefix?: string;
+  suffix?: string;
 }
 
-const EXP_COLOR_CYCLE = ["#f3a20c", "#9af30c", "#0cf3aa", "#2e0cf3", "#f30c9e"];
+const EXP_COLOR_CYCLE = [
+  { main: "#f59e0b", glow: "rgba(245, 158, 11, 0.3)" }, // amber
+  { main: "#10b981", glow: "rgba(16, 185, 129, 0.3)" }, // emerald
+  { main: "#06b6d4", glow: "rgba(6, 182, 212, 0.3)" },  // cyan
+  { main: "#8b5cf6", glow: "rgba(139, 92, 246, 0.3)" }, // violet
+  { main: "#ec4899", glow: "rgba(236, 72, 153, 0.3)" }, // pink
+];
 
 const expData: ExpDataType[] = [
-  { label: "Years of Experience", amount: 4 },
-  { label: "Projects Completed", amount: 15 },
-  { label: "Clients", amount: 10 },
-  { label: "Students Mentored", amount: 3 },
-  { label: "Certifications", amount: 5 },
+  { label: "Years of Experience", amount: 4, suffix: "+" },
+  { label: "Projects Completed", amount: 15, prefix: "~", suffix: "+" },
+  { label: "Clients Served", amount: 10, prefix: "~", suffix: "+" },
+  { label: "Students Mentored", amount: 3, suffix: "+" },
+  { label: "Certifications", amount: 5, suffix: "+" },
 ];
 
 export default function ExpBlock() {
   const [counts, setCounts] = useState(expData.map(() => 0));
-  const [mounted, setMounted] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    // Smooth delayed mount
-    const mountTimer = setTimeout(() => setMounted(true), 150);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isInView) {
+          setIsInView(true);
+        }
+      },
+      { threshold: 0.3 }
+    );
 
-    const duration = 4000; // total animation duration
-    const steps = 80; // number of frames
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [isInView]);
+
+  useEffect(() => {
+    if (!isInView) return;
+
+    const duration = 2500; // Animation duration
+    const steps = 60; // Number of frames
     const interval = duration / steps;
 
     const counterTimer = setInterval(() => {
@@ -40,57 +66,86 @@ export default function ExpBlock() {
       );
     }, interval);
 
-    const stopTimer = setTimeout(() => clearInterval(counterTimer), duration + 500);
+    const stopTimer = setTimeout(() => {
+      clearInterval(counterTimer);
+      // Ensure final values are exact
+      setCounts(expData.map((exp) => exp.amount));
+    }, duration + 100);
 
     return () => {
-      clearTimeout(mountTimer);
       clearTimeout(stopTimer);
       clearInterval(counterTimer);
     };
-  }, []);
+  }, [isInView]);
 
   return (
-    <section
-      className="
-        relative w-full max-w-5xl mx-auto
-        py-[clamp(1.5rem,4vw,3rem)]
-        px-[clamp(1rem,3vw,2rem)]
-        flex flex-wrap justify-center items-center gap-[clamp(1rem,3vw,2.5rem)]
-        rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl
-        shadow-[0_4px_40px_rgba(0,0,0,0.15)]
-        transition-all duration-700
-      "
+    <motion.section
+      ref={sectionRef}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className="relative w-full max-w-6xl mx-auto px-4 sm:px-6"
     >
-      {expData.map((exp, i) => (
-        <div
-          key={exp.label}
-          className={`
-            flex flex-col justify-center items-center text-center
-            transform-gpu transition-all duration-700 ease-out
-            ${
-              mounted
-                ? "opacity-100 translate-y-0 scale-100"
-                : "opacity-0 translate-y-6 scale-95"
-            }
-          `}
-        >
-          <p
-            className="font-extrabold tracking-tight text-[clamp(1.8rem,4vw,2.8rem)] leading-none"
-            style={{
-              color: EXP_COLOR_CYCLE[i % EXP_COLOR_CYCLE.length],
-              textShadow: "0 0 12px rgba(255,255,255,0.15)",
-            }}
-            aria-label={`${exp.amount} ${exp.label}`}
-          >
-            {["projects completed", "clients"].includes(exp.label.toLowerCase()) && "~"}
-            {counts[i]}+
-          </p>
+      {/* Background gradient effect */}
+      <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 to-blue-500/5 rounded-3xl blur-3xl" />
 
-          <p className="text-[clamp(0.7rem,1.2vw,0.95rem)] mt-2 text-white/80 font-light italic">
-            {exp.label}
-          </p>
-        </div>
-      ))}
-    </section>
+      <div
+        className="relative grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 lg:gap-8
+                   p-8 sm:p-10 lg:p-12
+                   rounded-3xl border border-white/10 bg-white/[0.02] backdrop-blur-xl
+                   shadow-2xl"
+      >
+        {expData.map((exp, i) => {
+          const colorScheme = EXP_COLOR_CYCLE[i % EXP_COLOR_CYCLE.length];
+
+          return (
+            <motion.div
+              key={exp.label}
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: i * 0.1, ease: "easeOut" }}
+              whileHover={{ scale: 1.05, y: -4 }}
+              className="flex flex-col justify-center items-center text-center group cursor-default"
+            >
+              {/* Number with glow effect */}
+              <div className="relative mb-3">
+                {/* Glow layer */}
+                <div
+                  className="absolute inset-0 blur-2xl opacity-50 group-hover:opacity-70 transition-opacity duration-300"
+                  style={{ background: colorScheme.glow }}
+                />
+
+                {/* Number */}
+                <p
+                  className="relative font-extrabold tracking-tight leading-none
+                             text-5xl sm:text-6xl lg:text-7xl
+                             transition-all duration-300 group-hover:scale-110"
+                  style={{
+                    color: colorScheme.main,
+                    textShadow: `0 0 20px ${colorScheme.glow}`,
+                  }}
+                  aria-label={`${exp.amount} ${exp.label}`}
+                >
+                  {exp.prefix}
+                  {counts[i]}
+                  {exp.suffix}
+                </p>
+              </div>
+
+              {/* Label */}
+              <p className="text-xs sm:text-sm text-white/70 font-light leading-relaxed max-w-[140px] group-hover:text-white/90 transition-colors">
+                {exp.label}
+              </p>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Decorative corners */}
+      <div className="absolute top-0 left-0 w-20 h-20 border-t-2 border-l-2 border-violet-400/20 rounded-tl-3xl" />
+      <div className="absolute bottom-0 right-0 w-20 h-20 border-b-2 border-r-2 border-blue-400/20 rounded-br-3xl" />
+    </motion.section>
   );
 }
