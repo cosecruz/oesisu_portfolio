@@ -7,8 +7,8 @@ import { Icon as IconifyIcon } from "@iconify/react";
 
 export interface ShowcaseItem {
   name: string;
-  logo?: string;                // image file (fallback)
-  icon?: string | ReactNode;    // Iconify = string, Lucide = ReactNode
+  logo?: string;
+  icon?: string | ReactNode;
 }
 
 export interface ShowcaseLayer {
@@ -26,11 +26,8 @@ interface AutoScrollShowcaseProps {
 }
 
 /**
- * 🔥 Fully responsive, type-safe infinite scroll showcase
- * Supports:
- *  - Iconify icons (via icon string)
- *  - Lucide icons (via ReactNode)
- *  - Image fallback (via logo URL)
+ * Enhanced AutoScrollShowcase with Apple-like polish
+ * Supports Iconify icons, Lucide icons, and images
  */
 const AutoScrollShowcase: React.FC<AutoScrollShowcaseProps> = React.memo(
   ({ layers, pauseOnHover = true, variant = "default", className = "" }) => {
@@ -38,22 +35,20 @@ const AutoScrollShowcase: React.FC<AutoScrollShowcaseProps> = React.memo(
 
     return (
       <section
-        className={`relative w-full max-w-7xl mx-auto
-          py-[clamp(2rem,6vw,5rem)]
-          px-[clamp(1rem,4vw,3rem)]
+        className={`relative w-full
+          py-6 sm:py-8
           flex flex-col items-center justify-center
-          gap-[clamp(2rem,4vw,4.5rem)]
+          gap-8 sm:gap-10
           overflow-hidden
           ${className}
         `}
       >
         {layers.map((layer, layerIdx) => {
-          const direction =
-            layer.direction ?? (layerIdx % 2 === 0 ? "left" : "right");
+          const direction = layer.direction ?? (layerIdx % 2 === 0 ? "left" : "right");
           const speed = layer.speed ?? (variant === "sponsor" ? 60 : 45);
           const isReversed = direction === "right";
 
-          // Tripled items for seamless infinite scroll
+          // Triple items for seamless infinite scroll
           const duplicatedItems = [
             ...layer.items,
             ...layer.items,
@@ -68,10 +63,7 @@ const AutoScrollShowcase: React.FC<AutoScrollShowcaseProps> = React.memo(
               onMouseLeave={() => pauseOnHover && setIsPaused(false)}
             >
               {layer.title && (
-                <h3
-                  className="text-center text-white/85 font-semibold mb-[clamp(0.8rem,2vw,1rem)]
-                  text-[clamp(0.9rem,2vw,1.2rem)] tracking-wide"
-                >
+                <h3 className="text-center text-white/75 font-semibold mb-4 sm:mb-6 text-base sm:text-lg tracking-wide">
                   {layer.title}
                 </h3>
               )}
@@ -81,21 +73,15 @@ const AutoScrollShowcase: React.FC<AutoScrollShowcaseProps> = React.memo(
                 <div
                   className="absolute inset-0 pointer-events-none z-10"
                   style={{
-                    maskImage:
-                      "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
-                    WebkitMaskImage:
-                      "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
+                    maskImage: "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
+                    WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
                   }}
                 />
 
                 <motion.div
-                  className="flex items-center gap-[clamp(0.8rem,2vw,1.5rem)]"
+                  className="flex items-center gap-4 sm:gap-6"
                   animate={{
-                    x: isPaused
-                      ? 0
-                      : isReversed
-                      ? ["0%", "calc(-33.333%)"]
-                      : ["0%", "calc(-33.333%)"],
+                    x: isPaused ? 0 : isReversed ? ["0%", "-33.333%"] : ["0%", "-33.333%"],
                   }}
                   transition={{
                     duration: speed,
@@ -105,39 +91,41 @@ const AutoScrollShowcase: React.FC<AutoScrollShowcaseProps> = React.memo(
                   style={{ willChange: "transform" }}
                 >
                   {duplicatedItems.map((item, idx) => (
-                    <div
+                    <motion.div
                       key={`${layerIdx}-${item.name}-${idx}`}
-                      className={`flex flex-col items-center justify-center shrink-0
-                        rounded-xl border border-white/10
-                        bg-white/5 backdrop-blur-md
-                        transition-transform duration-300 ease-out
-                        hover:bg-white/10 hover:scale-[1.05]
-                        shadow-[0_2px_12px_rgba(0,0,0,0.08)]
+                      whileHover={{ scale: 1.08, y: -4 }}
+                      transition={{ duration: 0.3, ease: "easeOut" }}
+                      className={`group flex flex-col items-center justify-center shrink-0
+                        rounded-2xl border border-white/10
+                        bg-white/[0.03] backdrop-blur-md
+                        hover:bg-white/[0.08] hover:border-white/20
+                        shadow-lg hover:shadow-xl
+                        transition-all duration-300
                         ${
                           variant === "sponsor"
-                            ? "w-[clamp(80px,15vw,130px)] p-[clamp(0.4rem,1vw,0.7rem)]"
-                            : "w-[clamp(70px,13vw,120px)] p-[clamp(0.35rem,1vw,0.6rem)]"
+                            ? "w-32 sm:w-36 md:w-40 p-4 sm:p-5"
+                            : "w-24 sm:w-28 md:w-32 p-3 sm:p-4"
                         }`}
                     >
                       <div
-                        className={`relative mb-2
+                        className={`relative mb-3
                           ${
                             variant === "sponsor"
-                              ? "w-[clamp(36px,6vw,60px)] h-[clamp(36px,6vw,60px)]"
-                              : "w-[clamp(32px,5vw,52px)] h-[clamp(32px,5vw,52px)]"
+                              ? "w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16"
+                              : "w-10 h-10 sm:w-12 sm:h-12"
                           }`}
                       >
                         {typeof item.icon === "string" ? (
-                          // Iconify icon (string key)
+                          // Iconify icon
                           <IconifyIcon
                             icon={item.icon}
                             width="100%"
                             height="100%"
-                            className="text-white/90"
+                            className="text-white/90 group-hover:text-white transition-colors duration-300"
                           />
                         ) : item.icon ? (
                           // Lucide or custom ReactNode
-                          <div className="w-full h-full flex items-center justify-center text-white/90">
+                          <div className="w-full h-full flex items-center justify-center text-white/90 group-hover:text-white transition-colors duration-300">
                             {item.icon}
                           </div>
                         ) : item.logo ? (
@@ -146,18 +134,21 @@ const AutoScrollShowcase: React.FC<AutoScrollShowcaseProps> = React.memo(
                             src={item.logo}
                             alt={item.name}
                             fill
-                            className="object-contain p-1"
+                            className="object-contain p-1 filter brightness-90 group-hover:brightness-100 transition-all duration-300"
                           />
                         ) : null}
                       </div>
 
                       <span
-                        className="text-white/85 font-medium text-center leading-tight truncate
-                        text-[clamp(0.65rem,1.5vw,0.85rem)] max-w-[8rem]"
+                        className="text-white/80 group-hover:text-white/95 font-medium text-center leading-tight truncate
+                        text-xs sm:text-sm max-w-full px-1 transition-colors duration-300"
                       >
                         {item.name}
                       </span>
-                    </div>
+
+                      {/* Subtle glow on hover */}
+                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/0 to-white/0 group-hover:from-white/5 group-hover:to-white/10 transition-all duration-300 pointer-events-none" />
+                    </motion.div>
                   ))}
                 </motion.div>
               </div>
