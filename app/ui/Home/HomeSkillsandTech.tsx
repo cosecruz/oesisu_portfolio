@@ -6,7 +6,7 @@ import type { Variants } from "framer-motion";
 import { Code, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import MiniShowcase from "../MiniShowcase";
-import type { ShowcaseLayer } from "../MiniShowcase";
+import { HomeData } from "@/app/lib/home.data";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0, y: 40 },
@@ -30,72 +30,10 @@ const itemVariants: Variants = {
   },
 };
 
-const skillCategories: ShowcaseLayer[] = [
-  {
-    title: "Languages",
-    items: [
-      { name: "TypeScript", icon: "logos:typescript-icon" },
-      { name: "Python", icon: "logos:python" },
-      { name: "Go", icon: "logos:go" },
-      { name: "C++", icon: "logos:c-plusplus" },
-      { name: "C", icon: "logos:c" },
-      { name: "Rust", icon: "logos:rust" },
-      { name: "Java", icon: "logos:java" },
-    ],
-  },
-  {
-    title: "Frameworks & Libraries",
-    items: [
-      { name: "React", icon: "logos:react" },
-      { name: "Next.js", icon: "logos:nextjs-icon" },
-      { name: "Express", icon: "logos:express" },
-      { name: "NestJS", icon: "logos:nestjs" },
-      { name: "Vue.js", icon: "logos:vue" },
-      { name: "Nuxt.js", icon: "logos:nuxt-icon" },
-      { name: "FastAPI", icon: "logos:fastapi-icon" },
-      { name: "Django", icon: "logos:django-icon" },
-    ],
-  },
-  {
-    title: "Cloud & DevOps",
-    items: [
-      { name: "AWS", icon: "logos:aws" },
-      { name: "Docker", icon: "logos:docker-icon" },
-      { name: "Kubernetes", icon: "logos:kubernetes" },
-      { name: "Terraform", icon: "logos:terraform-icon" },
-      { name: "Pulumi", icon: "logos:pulumi-icon" },
-      { name: "GitHub Actions", icon: "logos:github-actions" },
-      { name: "Vercel", icon: "logos:vercel-icon" },
-      { name: "Linux", icon: "logos:linux-tux" },
-      { name: "Shell", icon: "logos:bash-icon" },
-    ],
-  },
-  {
-    title: "Databases",
-    items: [
-      { name: "PostgreSQL", icon: "logos:postgresql" },
-      { name: "MongoDB", icon: "logos:mongodb-icon" },
-      { name: "Redis", icon: "logos:redis" },
-      { name: "SQLite", icon: "logos:sqlite" },
-      { name: "DynamoDB", icon: "logos:aws-dynamodb" },
-    ],
-  },
-  {
-    title: "Engineering Practices",
-    items: [
-      { name: "Git", icon: "logos:git-icon" },
-      { name: "Microservices", icon: "carbon:microservices-1" },
-      { name: "System Design", icon: "carbon:ibm-cloud-pak-manta-automated-data-lineage" },
-      { name: "Testing", icon: "logos:jest" },
-      { name: "CI/CD", icon: "logos:circleci" },
-      { name: "Teamwork", icon: "fluent:people-team-24-filled" },
-      { name: "Leadership", icon: "mdi:account-tie" },
-      { name: "Ownership", icon: "mdi:account-check" },
-    ],
-  },
-];
+
 
 export default function HomeSkillsandTech() {
+  const {skillCategories} = HomeData
   return (
     <motion.section
       id="skills"

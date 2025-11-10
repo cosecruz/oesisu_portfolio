@@ -7,17 +7,6 @@ export interface NavListInfo {
   dropdownItems?: { label: string; href: string }[];
 }
 
-export interface Role {
-  role: string;
-  comment: string;
-}
 
-export interface CarouselType {
-  id: string;
-  tag: string[];
-  title: string;
-  description?: string;
-  label?: string;
-  from?: string;
-  to?: string;
-}
+
+

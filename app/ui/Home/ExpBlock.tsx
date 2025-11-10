@@ -2,13 +2,9 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
+import { HomeData } from "@/app/lib/home.data";
 
-interface ExpDataType {
-  label: string;
-  amount: number;
-  prefix?: string;
-  suffix?: string;
-}
+
 
 const EXP_COLOR_CYCLE = [
   { main: "#f59e0b", glow: "rgba(245, 158, 11, 0.3)" }, // amber
@@ -18,15 +14,9 @@ const EXP_COLOR_CYCLE = [
   { main: "#ec4899", glow: "rgba(236, 72, 153, 0.3)" }, // pink
 ];
 
-const expData: ExpDataType[] = [
-  { label: "Years of Experience", amount: 4, suffix: "+" },
-  { label: "Projects Completed", amount: 15, prefix: "~", suffix: "+" },
-  { label: "Clients Served", amount: 10, prefix: "~", suffix: "+" },
-  { label: "Students Mentored", amount: 3, suffix: "+" },
-  { label: "Certifications", amount: 5, suffix: "+" },
-];
-
 export default function ExpBlock() {
+
+  const {expData} = HomeData
   const [counts, setCounts] = useState(expData.map(() => 0));
   const [isInView, setIsInView] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
@@ -88,12 +78,12 @@ export default function ExpBlock() {
       className="relative w-full max-w-6xl mx-auto px-4 sm:px-6"
     >
       {/* Background gradient effect */}
-      <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 to-blue-500/5 rounded-3xl blur-3xl" />
+      <div className="absolute inset-0 bg-linear-to-br from-violet-500/5 to-blue-500/5 rounded-3xl blur-3xl" />
 
       <div
         className="relative grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 lg:gap-8
                    p-8 sm:p-10 lg:p-12
-                   rounded-3xl border border-white/10 bg-white/[0.02] backdrop-blur-xl
+                   rounded-3xl border border-white/10 bg-white/2 backdrop-blur-xl
                    shadow-2xl"
       >
         {expData.map((exp, i) => {
