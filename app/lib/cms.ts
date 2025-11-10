@@ -291,7 +291,7 @@ export interface SortOptions {
  * GET  /api/values
  * GET  /api/quotes
  * GET  /api/sponsors
- * GET  /api/contact
+ * GET  /api/contacts
  *
  * // Admin endpoints (authenticated)
  * POST   /api/admin/education

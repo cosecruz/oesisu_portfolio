@@ -81,7 +81,7 @@ export const Sidebar = memo(function Sidebar({ navs }: { navs: NavListInfo[] }) 
         <header className="flex items-center justify-between border-b border-white/10 p-4 min-h-[64px] bg-white/[0.02]">
           <Link href="/" className="flex items-center gap-3 group">
             <motion.div
-              whileHover={{ rotate: 360, scale: 1.1 }}
+              whileHover={{ scale: 1.1 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
             >
               <Image

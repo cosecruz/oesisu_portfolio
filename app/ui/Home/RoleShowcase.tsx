@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import RoleComments from "@/app/lib/RoleComment";
+import { HomeData } from "@/app/lib/home.data";
 
 const roleVariants: Variants = {
   initial: { y: 20, opacity: 0 },
@@ -12,6 +12,8 @@ const roleVariants: Variants = {
 };
 
 export default function RoleCommentshowcase() {
+  const {roleComments} = HomeData;
+
   const [index, setIndex] = useState<number>(0);
   const [displayedText, setDisplayedText] = useState<string>("");
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
@@ -25,7 +27,7 @@ export default function RoleCommentshowcase() {
   const HOLD_DURATION = 3500;
   const PAUSE_AFTER_MANUAL = 6000;
 
-  const currentComment = RoleComments[index].comment;
+  const currentComment = roleComments[index].comment;
 
   const clearTimers = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
@@ -61,7 +63,7 @@ export default function RoleCommentshowcase() {
           clearInterval(intervalRef.current!);
           setIsDeleting(false);
           setIsTyping(true);
-          setIndex((prev) => (prev + 1) % RoleComments.length);
+          setIndex((prev) => (prev + 1) % roleComments.length);
         }
       }, DELETING_SPEED);
     };
@@ -93,7 +95,7 @@ export default function RoleCommentshowcase() {
     setIsTyping(true);
     setIsDeleting(false);
     setDisplayedText("");
-    setIndex((prev) => (prev + 1) % RoleComments.length);
+    setIndex((prev) => (prev + 1) % roleComments.length);
   }, [clearTimers]);
 
   const handlePrev = useCallback(() => {
@@ -102,25 +104,28 @@ export default function RoleCommentshowcase() {
     setIsTyping(true);
     setIsDeleting(false);
     setDisplayedText("");
-    setIndex((prev) => (prev - 1 + RoleComments.length) % RoleComments.length);
+    setIndex((prev) => (prev - 1 + roleComments.length) % roleComments.length);
   }, [clearTimers]);
 
   return (
-    <div className="w-full flex flex-col items-center justify-center mt-5 relative min-h-[160px] sm:min-h-[180px]">
+    <div className="w-full flex flex-col items-center justify-center mt-5 relative min-h-40 sm:min-h-[180px]">
       {/* Role header */}
       <div className="flex items-center justify-center mb-2 gap-3">
-        <button
+       <motion.button
           onClick={handlePrev}
+          whileHover={{ scale: 1.1, x: -2 }}
+          whileTap={{ scale: 0.9 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
           aria-label="Previous role"
-          className="p-1 rounded-full hover:bg-violet-500/20 transition"
+          className="p-1.5 rounded-full bg-white/5 hover:bg-violet-500/20 border border-white/10 hover:border-violet-400/30 transition-all duration-300"
         >
-          <ChevronLeft className="w-5 h-5 text-gray-400" />
-        </button>
+          <ChevronLeft className="w-5 h-5 text-white/60 hover:text-violet-400 transition-colors" strokeWidth={2} />
+        </motion.button>
 
         <div className="relative overflow-hidden h-8 sm:h-10 min-w-[180px] text-center">
           <AnimatePresence mode="wait">
             <motion.div
-              key={RoleComments[index].role}
+              key={roleComments[index].role}
               variants={roleVariants}
               initial="initial"
               animate="animate"
@@ -128,18 +133,21 @@ export default function RoleCommentshowcase() {
               transition={{ duration: 0.5, ease: "easeOut" }}
               className="text-base sm:text-xl font-semibold text-violet-400"
             >
-              {RoleComments[index].role}
+              {roleComments[index].role}
             </motion.div>
           </AnimatePresence>
         </div>
 
-        <button
+        <motion.button
           onClick={handleNext}
+          whileHover={{ scale: 1.1, x: 2 }}
+          whileTap={{ scale: 0.9 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
           aria-label="Next role"
-          className="p-1 rounded-full hover:bg-violet-500/20 transition"
+          className="p-1.5 rounded-full bg-white/5 hover:bg-violet-500/20 border border-white/10 hover:border-violet-400/30 transition-all duration-300"
         >
-          <ChevronRight className="w-5 h-5 text-gray-400" />
-        </button>
+          <ChevronRight className="w-5 h-5 text-white/60 hover:text-violet-400 transition-colors" strokeWidth={2} />
+        </motion.button>
       </div>
 
       {/* Comment typing area */}
@@ -154,14 +162,29 @@ export default function RoleCommentshowcase() {
         </span>
       </div>
 
-      {/* Progress dots */}
-      <div className="flex gap-1 mt-3 justify-center">
-        {RoleComments.map((_, i) => (
-          <div
+      {/* Progress dots - ENHANCED UI */}
+      <div className="flex gap-1.5 sm:gap-2 mt-3 justify-center">
+        {roleComments.map((_, i) => (
+          <motion.div
             key={i}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
-              i === index ? "bg-violet-400 scale-110" : "bg-gray-500/40"
+            whileHover={{ scale: 1.2 }}
+            transition={{ duration: 0.2 }}
+            className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+              i === index
+                ? "w-8 bg-violet-400 shadow-lg shadow-violet-400/50"
+                : "w-2 bg-white/30 hover:bg-white/50"
             }`}
+            onClick={() => {
+              if (i !== index) {
+                clearTimers();
+                setExtraHold(PAUSE_AFTER_MANUAL);
+                setIsTyping(true);
+                setIsDeleting(false);
+                setDisplayedText("");
+                setIndex(i);
+              }
+            }}
+            aria-label={`Go to role ${i + 1}`}
           />
         ))}
       </div>

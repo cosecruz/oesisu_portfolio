@@ -6,8 +6,8 @@ import type { Variants } from "framer-motion";
 import { Briefcase, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import MiniCarousel from "../MiniCarousel";
-import { CarouselType } from "@/app/lib/definitions";
-import { v4 as uuidv4 } from "uuid";
+import { HomeData } from "@/app/lib/home.data";
+
 
 const containerVariants: Variants = {
   hidden: { opacity: 0, y: 40 },
@@ -31,42 +31,10 @@ const itemVariants: Variants = {
   },
 };
 
-const items: CarouselType[] = [
-  {
-    id: uuidv4(),
-    tag: ["Education", "Undergraduate"],
-    title: "University Putra Malaysia",
-    label: "Bachelor of Software Engineering",
-    from: "2018",
-    to: "2022",
-  },
-  {
-    id: uuidv4(),
-    tag: ["Intern", "Work"],
-    title: "eCloudValley",
-    label: "Cloud Developer Intern",
-    from: "2024",
-    to: "2025",
-  },
-  {
-    id: uuidv4(),
-    tag: ["Work"],
-    title: "Freelance",
-    label: "Independent Contractor",
-    from: "2018",
-    to: "Now",
-  },
-  {
-    id: uuidv4(),
-    tag: ["Work"],
-    title: "Thee",
-    label: "Senior Software Engineer",
-    from: "2025",
-    to: "Now",
-  },
-];
+
 
 export default function HomeExp() {
+  const {exp} = HomeData
   return (
     <motion.section
       initial="hidden"
@@ -75,9 +43,9 @@ export default function HomeExp() {
       variants={containerVariants}
       className="w-full max-w-7xl mx-auto px-4 sm:px-6"
     >
-      <div className="relative p-8 sm:p-10 lg:p-12 rounded-3xl bg-gradient-to-br from-white/[0.03] to-white/[0.01] backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
+      <div className="relative p-8 sm:p-10 lg:p-12 rounded-3xl bg-linear-to-br from-white/3 to-white/1 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
         {/* Background decoration */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-violet-500/10 to-blue-500/10 blur-3xl rounded-full" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-linear-to-br from-violet-500/10 to-blue-500/10 blur-3xl rounded-full" />
 
         <div className="relative space-y-8">
           {/* Header */}
@@ -114,7 +82,7 @@ export default function HomeExp() {
 
           {/* Carousel */}
           <motion.div variants={itemVariants}>
-            <MiniCarousel items={items} />
+            <MiniCarousel items={exp} />
           </motion.div>
         </div>
       </div>

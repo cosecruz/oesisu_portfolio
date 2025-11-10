@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Search, Bell, Settings } from "lucide-react";
 
@@ -10,7 +11,7 @@ export default function Topbar({ admin }: { admin: boolean }) {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="h-16 flex items-center justify-between px-4 sm:px-6 md:px-8 bg-gradient-to-r from-[#0f0f10] to-[#1a1a1b] backdrop-blur-md border-b border-white/10 shadow-lg sticky top-0 z-30"
+      className="h-16 flex items-center justify-between px-4 sm:px-6 md:px-8 bg-linear-to-r from-[#0f0f10] to-bg-secondary backdrop-blur-md border-b border-white/10 shadow-lg sticky top-0 z-30"
     >
       {/* Left: Logo + Title */}
       <div className="flex items-center gap-4">
@@ -28,21 +29,24 @@ export default function Topbar({ admin }: { admin: boolean }) {
               className="drop-shadow-[0_0_8px_rgba(139,92,246,0.4)]"
             />
           </motion.div>
-          <span className="font-bold text-base bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text text-transparent">
+          <span className="font-bold text-base bg-linear-to-r from-violet-400 to-blue-400 bg-clip-text text-transparent">
             OESISU
           </span>
         </div>
 
         {/* Page indicator - hidden on mobile */}
         <div className="hidden sm:flex items-center gap-2">
-          <motion.span
+          <Link href="/">
+           <motion.span
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -10 }}
                 className="font-bold text-lg bg-linear-to-r from-violet-400 to-blue-400 bg-clip-text text-transparent"
-              >
+          >
                 OESISU
               </motion.span>
+          </Link>
+
           {admin && (
             <motion.span
               initial={{ scale: 0, opacity: 0 }}

@@ -6,8 +6,8 @@ import type { Variants } from "framer-motion";
 import { Award, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import MiniCarousel from "../MiniCarousel";
-import { CarouselType } from "@/app/lib/definitions";
 import { v4 as uuidv4 } from "uuid";
+import { HomeData } from "@/app/lib/home.data";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0, y: 40 },
@@ -31,42 +31,10 @@ const itemVariants: Variants = {
   },
 };
 
-const items: CarouselType[] = [
-  {
-    id: uuidv4(),
-    tag: ["AWS", "Certificate"],
-    title: "Certified Developer Associate",
-    label: "Amazon Web Services",
-    from: "2024",
-    to: "2027",
-  },
-  {
-    id: uuidv4(),
-    tag: ["Award"],
-    title: "Hackathon Winner",
-    label: "First Place",
-    from: "2021",
-    to: "2021",
-  },
-  {
-    id: uuidv4(),
-    tag: ["HILTI", "Award"],
-    title: "HILTI Dev Competition",
-    label: "Regional Winner",
-    from: "2020",
-    to: "2020",
-  },
-  {
-    id: uuidv4(),
-    tag: ["AWS", "Cloud Day"],
-    title: "AWS Dev Booth",
-    label: "Speaker & Presenter",
-    from: "2024",
-    to: "2024",
-  },
-];
+
 
 export default function HomeAchievements() {
+  const {achievements} = HomeData
   return (
     <motion.section
       initial="hidden"
@@ -114,7 +82,7 @@ export default function HomeAchievements() {
 
           {/* Carousel */}
           <motion.div variants={itemVariants}>
-            <MiniCarousel items={items} />
+            <MiniCarousel items={achievements} />
           </motion.div>
         </div>
 

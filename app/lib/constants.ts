@@ -26,7 +26,7 @@ export const GENERAL_PAGE_LISTS: NavListInfo[] = [
   {
     id: "apps",
     label: "Apps",
-    href: "/app",
+    href: "/apps",
     icon: AppWindow,
     hasDropdown: true,
     dropdownItems: [
