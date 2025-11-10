@@ -4,10 +4,9 @@ import React, { useId } from "react";
 import Link from "next/link";
 import { motion, Variants, useReducedMotion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import type { CarouselType } from "../lib/definitions";
 import { cn } from "@/lib/utils";
 import { TagList } from "./TagList";
+import { CarouselType } from "../lib/home.data";
 
 interface MiniCarouselProps {
   items: CarouselType[];

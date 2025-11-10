@@ -65,7 +65,7 @@ const ExpData: ExpDataType[] = [
   { label: "Certifications", amount: 5, suffix: "+" },
 ];
 
-interface CarouselType {
+export interface CarouselType {
   id: string;
   tag: string[];
   title: string;

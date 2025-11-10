@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence, Variants, Transition } from 'framer-motion';
-import { CarouselType } from '../lib/definitions';
+import { CarouselType } from "../lib/home.data";
 
 
 
